@@ -9,14 +9,15 @@ when "centos", "redhat", "amazon"
   end
 end
 
-service 'apache2' do
-  case node[:platform]
-  when 'redhat', 'centos', 'amazon'
-    service_name 'httpd'
-  when 'debian', 'ubuntu'
-    service_name 'apache2'
+case node[:platform]
+when "ubuntu", "debian"
+  service "apache2" do
+    action [:start, :enable]
   end
-  action [:start, :enable]
+when "centos", "redhat", "amazon"
+  service "httpd" do
+    action [:start, :enable]
+  end
 end
 
 template '/var/www/html/index.html' do
